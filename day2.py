@@ -4,41 +4,7 @@ alist = [x[x.find(':')+2:] for x in text.split('\n')]
 def get_num(word):
     return int(word[4:])
 blist = [get_num(x[:x.find(':')]) for x in text.split('\n')]
-#print(alist,blist)
 gamedict = dict(zip(blist,alist))
-print(gamedict)
-
-'''    
-def fun(alist):
-    green = 13
-    red = 12
-    blue = 14
-    oneover = False
-    for dice in alist.split(','):
-        if 'red' in dice and int(dice.strip().split(' ')[0])>red:
-            oneover = True
-        elif 'blue' in dice and int(dice.strip().split(' ')[0])>blue:
-            oneover = True
-        elif 'green' in dice and int(dice.strip().split(' ')[0])>green:
-            oneover = True
-    
-    return oneover
-#print(lessthan('3 blue, 4 red'))
-#print(lessthan('3 blue, 15 red'))
-total = 0
-for key in gamedict:
-    oneover = False
-    for draw in gamedict[key].split(';'):
-        if fun(draw):
-            oneover = True
-    if oneover:
-        total = total 
-        print(f'TRUE {key}: {gamedict[key]}')
-    else:
-        print(f'FALSE {key}: {gamedict[key]}')
-        total = total +key
-
-print(total)'''
 
 def fun(alist):
     green = 0
@@ -54,8 +20,6 @@ def fun(alist):
             green = int(dice.strip().split(' ')[0])
     
     return red,blue,green
-#print(lessthan('3 blue, 4 red'))
-#print(lessthan('3 blue, 15 red'))
 total = 0
 for key in gamedict:
     red,blue,green = 0,0,0
@@ -73,4 +37,33 @@ for key in gamedict:
     total = total+power
 
 print(total)
+
+ #Part 1 below   
+'''    
+def fun(alist):
+    green = 13
+    red = 12
+    blue = 14
+    oneover = False
+    for dice in alist.split(','):
+        if 'red' in dice and int(dice.strip().split(' ')[0])>red:
+            oneover = True
+        elif 'blue' in dice and int(dice.strip().split(' ')[0])>blue:
+            oneover = True
+        elif 'green' in dice and int(dice.strip().split(' ')[0])>green:
+            oneover = True
     
+    return oneover
+
+total = 0
+for key in gamedict:
+    oneover = False
+    for draw in gamedict[key].split(';'):
+        if fun(draw):
+            oneover = True
+    if oneover:
+        total = total 
+    else:
+        total = total +key
+
+print(total)'''
