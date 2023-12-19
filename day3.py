@@ -8,13 +8,12 @@ atext = '''467..114..
 .....+.58.
 ..592.....
 ......755.
-...$.*....
-.664.598..
+...$......
+.664..*598
 '''
 
 special_char = "!@#$%^&*()\{\}[]=+:;<>,`~\\?/|_-'\""
 alist = text.split("\n")
-alist.pop()
 strlen = len(alist[0])
 listlen = len(alist)
 def find_num(j,string):
@@ -32,57 +31,95 @@ def find_num(j,string):
         return string[start:end+1],start, end
     else:
         return ''
-def make_index_range(string,start,end):
-    start = start-1 if start-1>=0 else 0
-    end = end+1 if end+1<=len(string)-1 else len(string)-1
-    return [x for x in range(start,end+1)]
-def check_symbols(strlist,list_index,start,end):
-    string = strlist[list_index]
-    index_range = make_index_range(string,start,end)
-    #print('cs',list_index,start,end)
-    if (start>0 and string[start-1] in special_char):
-        return True
-    elif(end<len(string)-1 and string[end+1] in special_char):
-        return True
-    else: 
-        if list_index == 0:
-            for i in index_range:
-                if strlist[list_index+1][i] in special_char:
-                    return True
-            return False
-        elif list_index == len(strlist)-1:
-            for i in index_range:
-                if strlist[list_index-1][i] in special_char:
-                    return True
-            return False
-        else:
-            for i in index_range:
-                #print(list_index,i,strlist)
-                if strlist[list_index+1][i] in special_char or strlist[list_index-1][i] in special_char:
-                    return True
-            return False
 total = 0
-print(listlen,strlen)
+def replace_num(string,start,stop):
+    string_list = list(string)
+    string_list[start:stop+1] = len(string_list[start:stop+1])*'.'
+    new_string = "".join(string_list)
+    return new_string
+print(strlen)
+print(listlen)
 for list_index in range(0,listlen):
-    end = -1
     for str_index in range(0,strlen):
-        print(str_index , f'end: {end}  {alist[list_index][str_index]}')
-        if str_index > end:
-            #print(f'end = {end}')
-            print(f'end: {end}  {alist[list_index][str_index]}')
-            if (alist[list_index][str_index]).isnumeric():
-                string, start, temp_end = find_num(str_index,alist[list_index])
-                #print(list_index,start,end,temp_end)
-                print(f'number: {string} cs: {check_symbols(alist,list_index,start,temp_end)}')
-                if check_symbols(alist,list_index,start,temp_end):
-                    print(int(string))
-                    total = total + int(string)
-                    end = temp_end
-        else:
-            continue
-print(total)                
+        if alist[list_index][str_index] in special_char:
+            list_min = 0
+            list_max = listlen-1
+            str_min = 0
+            str_max = strlen-1
+            check_up = (max(list_index-1,list_min),str_index)
+            check_right = (list_index,min(str_max,str_index+1))
+            check_left = (list_index,max(str_min,str_index-1))
+            check_down = (min(list_index+1,list_max),str_index)
+            check_up_right = (max(list_index-1,list_min),min(str_max,str_index+1))
+            check_up_left = (max(list_index-1,list_min),max(str_min,str_index-1))
+            check_down_left = (min(list_index+1,list_max),max(str_min,str_index-1))
+            check_down_right = (min(list_index+1,list_max),min(str_max,str_index+1))
+            check_list = [check_up,check_right,check_left,check_down,check_up_right,check_up_left,check_down_left,check_down_right]
+            for check in check_list:
+                l,s = check
+                if alist[l][s].isdigit():
+                    # print(l,s,alist[l][s])
+                    # print(find_num(s,alist[l]))
+                    num,start,stop = find_num(s,alist[l])
+                    string = replace_num(alist[l],start,stop)
+                    alist[l] = string
+                    total = total + int(num)
+              
+print(total)
 
 
-                
+# part 1
+# special_char = "!@#$%^&*()\{\}[]=+:;<>,`~\\?/|_-'\""
+# alist = text.split("\n")
+# strlen = len(alist[0])
+# listlen = len(alist)
+# def find_num(j,string):
+#     if string[j].isnumeric():
 
-
+#         start = j
+#         end = j
+#         while True:
+#             if start>0 and string[start-1].isnumeric():
+#                 start = start-1
+#             elif end<=len(string)-2 and string[end+1].isnumeric():
+#                 end = end + 1
+#             else:
+#                 break
+#         return string[start:end+1],start, end
+#     else:
+#         return ''
+# total = 0
+# def replace_num(string,start,stop):
+#     string_list = list(string)
+#     string_list[start:stop+1] = len(string_list[start:stop+1])*'.'
+#     new_string = "".join(string_list)
+#     return new_string
+# print(strlen)
+# print(listlen)
+# for list_index in range(0,listlen):
+#     for str_index in range(0,strlen):
+#         if alist[list_index][str_index] in special_char:
+#             list_min = 0
+#             list_max = listlen-1
+#             str_min = 0
+#             str_max = strlen-1
+#             check_up = (max(list_index-1,list_min),str_index)
+#             check_right = (list_index,min(str_max,str_index+1))
+#             check_left = (list_index,max(str_min,str_index-1))
+#             check_down = (min(list_index+1,list_max),str_index)
+#             check_up_right = (max(list_index-1,list_min),min(str_max,str_index+1))
+#             check_up_left = (max(list_index-1,list_min),max(str_min,str_index-1))
+#             check_down_left = (min(list_index+1,list_max),max(str_min,str_index-1))
+#             check_down_right = (min(list_index+1,list_max),min(str_max,str_index+1))
+#             check_list = [check_up,check_right,check_left,check_down,check_up_right,check_up_left,check_down_left,check_down_right]
+#             for check in check_list:
+#                 l,s = check
+#                 if alist[l][s].isdigit():
+#                     # print(l,s,alist[l][s])
+#                     # print(find_num(s,alist[l]))
+#                     num,start,stop = find_num(s,alist[l])
+#                     string = replace_num(alist[l],start,stop)
+#                     alist[l] = string
+#                     total = total + int(num)
+              
+# print(total)
