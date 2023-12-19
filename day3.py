@@ -8,11 +8,10 @@ atext = '''467..114..
 .....+.58.
 ..592.....
 ......755.
-...$......
-.664..*598
-'''
+...$.*....
+.664.598..'''
 
-special_char = "!@#$%^&*()\{\}[]=+:;<>,`~\\?/|_-'\""
+special_char = "*"
 alist = text.split("\n")
 strlen = len(alist[0])
 listlen = len(alist)
@@ -55,15 +54,32 @@ for list_index in range(0,listlen):
             check_down_left = (min(list_index+1,list_max),max(str_min,str_index-1))
             check_down_right = (min(list_index+1,list_max),min(str_max,str_index+1))
             check_list = [check_up,check_right,check_left,check_down,check_up_right,check_up_left,check_down_left,check_down_right]
+            first_num = []
+            second_num = []
             for check in check_list:
                 l,s = check
+                #print(list_index,str_index)
+                #print(check,alist[l][s])
                 if alist[l][s].isdigit():
                     # print(l,s,alist[l][s])
                     # print(find_num(s,alist[l]))
                     num,start,stop = find_num(s,alist[l])
-                    string = replace_num(alist[l],start,stop)
-                    alist[l] = string
-                    total = total + int(num)
+                    #print(num,start,stop)
+                    if first_num == []:
+                        first_num = [num,start,stop]
+                        #print(first_num)
+                    elif first_num != [] and first_num != [num,start,stop] and second_num ==[]:
+                        second_num = [num,start,stop]
+                       # print(first_num,second_num)
+                        string = replace_num(alist[l],first_num[1],first_num[2])
+                        alist[l] = string
+                        string = replace_num(alist[l],second_num[1],second_num[2])
+                        alist[l] = string
+                        total = total + (int(first_num[0])*int(second_num[0]))
+                    # else:
+                    #     first_num = []
+                    #     second_num = []
+                    
               
 print(total)
 
