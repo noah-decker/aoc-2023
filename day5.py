@@ -46,9 +46,23 @@ fmap = [[50, 98, 2],
 [52, 50, 48]]
 
 minn = float("inf")
-for seed in seeds:
-      for arange in fmap:
+def get_next_list(seeds,fmap):
+    next_list = []
+    for seed in seeds:
+        next_source = seed
+        for arange in fmap:
             dest_start,source_start,len_range = arange
             source_range = get_range(source_start,len_range)
-            dest_range = get_range(dest_start,len_range)
-            
+            dest_range = get_range(dest_start,len_range)            
+            temp = in_range(dest_range,source_range,seed)
+            if temp != seed:
+                next_source = temp
+        next_list.append(next_source)
+    return next_list
+
+alist = atext.split('\n\n')
+seeds = [int(x) for x in alist[0].split(':')[1].strip().split(' ')]
+alists = alist[1:]
+for alist in alists:
+     pass
+print(seeds)
